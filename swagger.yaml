@@ -1,164 +1,235 @@
-swagger: "2.0"
+openapi: 3.0.1
 info:
-  description: "Chiamate API relative all'accesso e alla creazione del token."
-  version: "1.0.0"
-  title: "R.A.O. API"
+  title: R.A.O. API
+  description: Chiamate API relative all'accesso e alla creazione del token.
   contact:
-    email: "apiteam@swagger.io"
-host: "rao.spid.app"
-basePath: "/v2"
+    email: apiteam@swagger.io
+  version: 1.0.0
+servers:
+- url: https://rao.spid.app/v2
+- url: http://rao.spid.app/v2
 tags:
-- name: "Authorization"
-  description: "Api relative all'accesso di un operatore"
+- name: Authorization
+  description: Api relative all'accesso di un operatore
   externalDocs:
-    description: "git R.A.O. pubblico"
-    url: "https://github.com/Sielte/rao-pubblico"
-- name: "Generate token"
-  description: "Generazione di una richiesta di identificazione"
+    description: git R.A.O. pubblico
+    url: https://github.com/Sielte/rao-pubblico
+- name: Generate token
+  description: Generazione di una richiesta di identificazione
   externalDocs:
-    description: "git R.A.O. pubblico"
-    url: "https://github.com/Sielte/rao-pubblico"
-schemes:
-- "https"
-- "http"
+    description: git R.A.O. pubblico
+    url: https://github.com/Sielte/rao-pubblico
 paths:
   /auth:
     post:
       tags:
-      - "Authorization"
-      summary: "Ottieni un token di sessione inserendo username e password"
-      description: ""
-      operationId: "auth"
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "payload"
-        description: "User e password dell'operatore"
+      - Authorization
+      summary: Ottieni un token di sessione inserendo username e password
+      operationId: auth
+      requestBody:
+        description: User e password dell'operatore
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Auth'
         required: true
-        schema:
-          $ref: "#/definitions/Auth"
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/ApiAuthResponse"
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse200'
+      x-codegen-request-body-name: payload
   /token:
     post:
       tags:
-      - "Generate token"
-      summary: "Creazione della richiesta di identificazione"
-      description: ""
-      operationId: "token"
-      consumes:
-      - "multipart/form-data"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "header"
-        description: "Header contenente il token di autorizzazione"
+      - Generate token
+      summary: Creazione della richiesta di identificazione
+      operationId: token
+      requestBody:
+        description: User e password dell'operatore
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserDetail'
         required: true
-        schema:
-          $ref: "#/definitions/Header"
-      - in: "body"
-        name: "payload"
-        description: "User e password dell'operatore"
-        required: true
-        schema:
-          $ref: "#/definitions/UserDetail"
       responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/ApiAuthResponse"
-securityDefinitions:
-  petstore_auth:
-    type: "oauth2"
-    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      write:pets: "modify pets in your account"
-      read:pets: "read your pets"
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
-definitions:
-  Header:
-    type: "object"
-    required:
-    - "Authorization"
-    properties:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse200'
+        400:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse400'
+        403:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse403'
+        404:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse404'
+      x-codegen-request-body-name: payload
+components:
+  schemas:
+    Header:
+      required:
+      - Authorization
+      type: object
+      properties:
         Authorization:
-          type: "string"
-          example: "eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw"
-  Auth:
-    type: "object"
-    required:
-    - "username"
-    - "password"
-    properties:
-      username:
-        type: "string"
-        example: "RSSMRA80A01C351O"
-      password:
-        type: "string"
-        example: "LaMiaPass123!"
-  UserDetail:
-    type: "object"
-    required:
-    - "fiscalNumber"
-    - "name"
-    properties:
-      fiscalNumber:
-        type: "string"
-        example: "RSSMRA80A01C351O"
-      name:
-        type: "string"
-        example: "Mario"
-      familyName:
-        type: "string"
-        example: "Rossi"
-      identificationSerialCode:
-        type: "string"
-        example: "mariorossi@mail.com"
-      identificationExpirationDate:
-        type: "string"
-        example: "mariorossi@mail.com"
-      gender:
-        type: "string"
-        example: "M"
-      dateOfBirth:
-        type: "string"
-        example: "mariorossi@mail.com"
-      nationOfBirth:
-        type: "string"
-        example: "mariorossi@mail.com"
-      email:
-        type: "string"
-        example: "mariorossi@mail.com"
-      pec:
-        type: "string"
-        example: "mariorossi@mail.com"
-      countryCallingCode:
-        type: "string"
-        example: "mariorossi@mail.com"
-      phoneNumber:
-        type: "string"
-        example: "mariorossi@mail.com"
-      
-  ApiAuthResponse:
-    type: "object"
-    required:
-    - "statusCode"
-    - "authToken"
-    properties:
-      statusCode:
-        type: "integer"
-        example: "200"
-      authToken:
-        type: "string"
-        example: "eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw"
+          type: string
+          example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
+    Auth:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          example: RSSMRA80A01C351O
+        password:
+          type: string
+          example: LaMiaPass123!
+    UserDetail:
+      required:
+      - fiscalNumber
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: Giovanni Mario
+        familyName:
+          type: string
+          example: Rossi
+        placeOfBirth:
+          type: string
+          example: C351
+        countyOfBirth:
+          type: string
+          example: CT
+        nationOfBirth:
+          type: string
+          example: Z000
+        dateOfBirth:
+          type: string
+          example: 2000-09-24
+        gender:
+          type: string
+          example: M
+        fiscalNumber:
+          type: string
+          example: RSSGNN00P24F205L
+        email:
+          type: string
+          example: mariorossi@mail.com
+        pec:
+          type: string
+          example: me@meypecprovider.com
+        identificationSerialCode:
+          type: string
+          example: "123456789"
+        identificationExpirationDate:
+          type: string
+          example: 2025-09-24
+        idCardType:
+          type: string
+          example: CartaIdentita
+        idCardDocNumber:
+          type: string
+          example: AS09452389
+        idCardIssuer:
+          type: string
+          example: Catania
+        idCardIssueDate:
+          type: string
+          example: 2013-01-02
+        idCardExpirationDate:
+          type: string
+          example: 2023-09-24
+        countryCallingCode:
+          type: string
+          example: +39
+        phoneNumber:
+          type: string
+          example: "3471234567"
+        addressType:
+          type: string
+          example: Via
+        addressName:
+          type: string
+          example: Augusto
+        addressNumber:
+          type: string
+          example: 1/A
+        postalCode:
+          type: string
+          example: "00129"
+        municipality:
+          type: string
+          example: H501
+        county:
+          type: string
+          example: RM
+        nation:
+          type: string
+          example: Z000
+        pin:
+          type: integer
+          example: 142536
+    ApiAuthResponse200:
+      required:
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
+    ApiAuthResponse400:
+      required:
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Richiesta non valida
+    ApiAuthResponse403:
+      required:
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 403
+        message:
+          type: string
+          example: Accesso negato
+    ApiAuthResponse404:
+      required:
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Non trovato
