@@ -8,12 +8,12 @@ info:
 host: "rao.spid.app"
 basePath: "/v2"
 tags:
-- name: "Authorization"
+- name: "Authentication"
   description: "Api relative all'accesso di un operatore"
   externalDocs:
     description: "git R.A.O. pubblico"
     url: "https://github.com/Sielte/rao-pubblico"
-- name: "Generate token"
+- name: "Sigillo"
   description: "Generazione di una richiesta di identificazione"
   externalDocs:
     description: "git R.A.O. pubblico"
@@ -25,7 +25,7 @@ paths:
   /auth:
     post:
       tags:
-      - "Authorization"
+      - "Authentication"
       summary: "Ottieni un token di sessione inserendo username e password"
       description: ""
       operationId: "auth"
@@ -48,7 +48,7 @@ paths:
   /token:
     post:
       tags:
-      - "Generate token"
+      - "Sigillo"
       summary: "Creazione della richiesta di identificazione"
       description: ""
       operationId: "token"
