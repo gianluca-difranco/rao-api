@@ -55,7 +55,7 @@ paths:
       parameters:
       - in: "body"
         name: "header"
-        description: "Header contenente il token di autorizzazione"
+        description: "Header contenente il token di autenticazione"
         required: true
         schema:
           $ref: "#/definitions/Header"
@@ -70,10 +70,10 @@ paths:
           description: "Operazione eseguita con successo"
           schema:
             $ref: "#/definitions/ApiAuthResponse200"
-        "400":
+        "405":
           description: "Richiesta non valida"
           schema:
-            $ref: "#/definitions/ApiAuthResponse400"
+            $ref: "#/definitions/ApiAuthResponse405"
         "403":
           description: "Accesso negato"
           schema:
@@ -97,6 +97,9 @@ definitions:
     - "username"
     - "password"
     properties:
+      ipaCode:
+        type: "string"
+        example: "C_C351"
       username:
         type: "string"
         example: "RSSMRA80A01C351O"
@@ -216,7 +219,7 @@ definitions:
         type: "string"
         example: "e!WE4q"
       
-  ApiAuthResponse400:
+  ApiAuthResponse405:
     type: "object"
     required:
     - "statusCode"
@@ -224,10 +227,10 @@ definitions:
     properties:
       statusCode:
         type: "integer"
-        example: "400"
+        example: "405"
       message:
         type: "string"
-        example: "Richiesta non valida"
+        example: "Input non valido"
   ApiAuthResponse403:
     type: "object"
     required:
