@@ -1,0 +1,278 @@
+openapi: 3.0.1
+info:
+  title: R.A.O. API
+  description: Chiamate API relative all'accesso e alla creazione del token.
+  version: 1.0.0
+servers:
+- url: https://milano.rao.spid.app/
+tags:
+- name: Authentication
+  description: Api relative all'accesso di un operatore
+  externalDocs:
+    description: git R.A.O. pubblico
+    url: https://github.com/Sielte/rao-pubblico
+- name: Sigillo
+  description: Generazione di una richiesta di identificazione
+  externalDocs:
+    description: git R.A.O. pubblico
+    url: https://github.com/Sielte/rao-pubblico
+paths:
+  /auth:
+    post:
+      tags:
+      - Authentication
+      summary: Ottieni un token di sessione inserendo username e password
+      operationId: auth
+      requestBody:
+        description: User e password dell'operatore
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Auth'
+        required: true
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse200'
+      x-codegen-request-body-name: payload
+  /token:
+    post:
+      tags:
+      - Sigillo
+      summary: Creazione della richiesta di identificazione
+      operationId: token
+      parameters:
+      - name: header
+        in: header
+        description: Header contenente il token di autenticazione
+        required: true
+        schema:
+            $ref: '#/components/schemas/Header'
+      requestBody:
+        description: User e password dell'operatore
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserDetail'
+        required: true
+      responses:
+        200:
+          description: Operazione eseguita con successo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse200'
+        403:
+          description: Accesso negato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse403'
+        404:
+          description: Utente non trovato
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse404'
+        405:
+          description: Richiesta non valida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse405'
+      x-codegen-request-body-name: payload
+components:
+  schemas:
+    Header:
+      required:
+      - Authentication
+      type: object
+      properties:
+        Authentication:
+          type: string
+          example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
+    Auth:
+      required:
+      - password
+      - username
+      - ipaCode
+      type: object
+      properties:
+        ipaCode:
+          type: string
+          example: C_C351
+        username:
+          type: string
+          example: RSSMRA80A01C351O
+        password:
+          type: string
+          example: LaMiaPass123!
+    UserDetail:
+      required:
+      - fiscalNumber
+      - name
+      - familyName
+      - placeOfBirth
+      - countyOfBirth
+      - nationOfBirth
+      - dateOfBirth
+      - gender
+      - email
+      - identificationSerialCode
+      - identificationExpirationDate
+      - idCardType
+      - idCardDocNumber
+      - idCardIssuer
+      - idCardIssueDate
+      - idCardExpirationDate
+      - countryCallingCode
+      - phoneNumber
+      - addressType
+      - addressName
+      - addressNumber
+      - postalCode
+      - municipality
+      - county
+      - nation
+      - pin
+      type: object
+      properties:
+        name:
+          type: string
+          example: Giovanni Mario
+        familyName:
+          type: string
+          example: Rossi
+        placeOfBirth:
+          type: string
+          example: C351
+        countyOfBirth:
+          type: string
+          example: CT
+        nationOfBirth:
+          type: string
+          example: Z000
+        dateOfBirth:
+          type: string
+          example: 2000-09-24
+        gender:
+          type: string
+          example: M
+        fiscalNumber:
+          type: string
+          example: RSSGNN00P24F205L
+        email:
+          type: string
+          example: mariorossi@mail.com
+        pec:
+          type: string
+          example: me@meypecprovider.com
+        identificationSerialCode:
+          type: string
+          example: "123456789"
+        identificationExpirationDate:
+          type: string
+          example: 2025-09-24
+        idCardType:
+          type: string
+          example: CartaIdentita
+        idCardDocNumber:
+          type: string
+          example: AS09452389
+        idCardIssuer:
+          type: string
+          example: Catania
+        idCardIssueDate:
+          type: string
+          example: 2013-01-02
+        idCardExpirationDate:
+          type: string
+          example: 2023-09-24
+        countryCallingCode:
+          type: string
+          example: +39
+        phoneNumber:
+          type: string
+          example: "3471234567"
+        addressType:
+          type: string
+          example: Via
+        addressName:
+          type: string
+          example: Augusto
+        addressNumber:
+          type: string
+          example: 1/A
+        postalCode:
+          type: string
+          example: "00129"
+        municipality:
+          type: string
+          example: H501
+        county:
+          type: string
+          example: RM
+        nation:
+          type: string
+          example: Z000
+        pin:
+          type: integer
+          example: 142536
+    ApiAuthResponse200:
+      required:
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
+    ApiTokenResponse200:
+      required:
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: e!WE4q
+    ApiAuthResponse405:
+      required:
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 405
+        message:
+          type: string
+          example: Input non valido
+    ApiAuthResponse403:
+      required:
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 403
+        message:
+          type: string
+          example: Accesso negato
+    ApiAuthResponse404:
+      required:
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: Non trovato
