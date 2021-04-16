@@ -21,10 +21,10 @@ paths:
     post:
       tags:
       - Authentication
-      summary: Ottieni un token di sessione inserendo username e password
+      summary: Ottieni un token di sessione inserendo username, password e codice IPA.
       operationId: auth
       requestBody:
-        description: User e password dell'operatore
+        description: User e password dell'operatore, codice IPA del R.A.O. di appartenenza
         content:
           multipart/form-data:
             schema:
@@ -32,11 +32,29 @@ paths:
         required: true
       responses:
         200:
-          description: successful operation
+          description: Operazione eseguita con successo
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiAuthResponse200'
+        403:
+          description: l'utente è disabilitato. Non può accedere
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse403'
+        404:
+          description: Username o Password errati
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse404'
+        405:
+          description: Formato dei parametri non corretto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiAuthResponse405'
       x-codegen-request-body-name: payload
   /token:
     post:
@@ -45,12 +63,13 @@ paths:
       summary: Creazione della richiesta di identificazione
       operationId: token
       parameters:
-      - name: header
+      - name: Authentication
         in: header
-        description: Header contenente il token di autenticazione
+        description: Token di autenticazione
         required: true
         schema:
-            $ref: '#/components/schemas/Header'
+          type: string
+          example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
       requestBody:
         description: User e password dell'operatore
         content:
