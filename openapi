@@ -24,7 +24,10 @@ paths:
       summary: Ottieni un token di sessione inserendo username, password e codice IPA.
       operationId: auth
       requestBody:
-        description: User e password dell'operatore, codice IPA del R.A.O. di appartenenza
+        description:
+          La funzione prende in input il Codice IPA del R.A.O. di appartenenza dell'utente, codice fiscale ed email dell'operatore che sta effettuando l'accesso. <br>
+          Output CASO OK - Token di autenticazione. <br>
+          Output CASO KO - messaggio relativo all'errore riscontrato.
         content:
           multipart/form-data:
             schema:
@@ -65,13 +68,16 @@ paths:
       parameters:
       - name: Authentication
         in: header
-        description: Token di autenticazione
+        description: Token di autenticazione - token da inserire nell'header per validare la richiesta di identificazione. 
         required: true
         schema:
           type: string
           example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
       requestBody:
-        description: Pin dell'operatore e dati relativi al cittadino che richiede l'identificazione
+        description: 
+          La funzione prende in input i dati relativi al cittadino che richiede l'identificazione (tra i quali dati anagrafici, domicilio, documento di riconoscimento)  ed il pin dell'operatore che sta effettuando la richiesta. <br> 
+          Output CASO OK - primi 6 caratteri del codice di attivazione (passphrase). <br>
+          Output CASO KO - messaggio relativo all'errore riscontrato.
         content:
           multipart/form-data:
             schema:
@@ -90,18 +96,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiAuthResponse403'
-        404:
-          description: Utente non trovato
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiAuthResponse404'
         405:
           description: Richiesta non valida
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiAuthResponse405'
+                $ref: '#/components/schemas/ApiTokenResponse405'
       x-codegen-request-body-name: payload
 components:
   schemas:
@@ -265,7 +265,18 @@ components:
           example: 405
         message:
           type: string
-          example: Input non valido
+          example: Il formato del campo username non è corretto
+    ApiTokenResponse405:
+      required:
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          example: 405
+        message:
+          type: string
+          example: Il PIN dell'operatore deve essere composto esattamente da 6 cifre.
     ApiAuthResponse403:
       required:
       - statusCode
@@ -276,7 +287,7 @@ components:
           example: 403
         message:
           type: string
-          example: Accesso negato
+          example: Credenziali bloccate. Contatta il Security Officer.
     ApiAuthResponse404:
       required:
       - statusCode
