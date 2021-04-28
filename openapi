@@ -25,7 +25,7 @@ paths:
       operationId: auth
       requestBody:
         description:
-          La funzione prende in input il Codice IPA del R.A.O. di appartenenza dell'utente, codice fiscale ed email dell'operatore che sta effettuando l'accesso. <br>
+          La funzione prende in input il Codice IPA del R.A.O. di appartenenza dell'utente, codice fiscale e l'hash SHA256 della password dell'operatore che sta effettuando l'accesso. <br>
           Output CASO OK - Token di autenticazione. <br>
           Output CASO KO - messaggio relativo all'errore riscontrato.
         content:
@@ -75,9 +75,8 @@ paths:
           example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
       requestBody:
         description: 
-          La funzione prende in input i dati relativi al cittadino che richiede l'identificazione (tra i quali dati anagrafici, domicilio, documento di riconoscimento), una variabile boleana get_token e una stringa che corrisponde all'HMAC dei dati di cui sopra più il PIN dell'operatore. <br> 
-          Output CASO OK (con get_token == false) - prima parte del codice di attivazione (passphrase). <br>
-          Output CASO OK (con get_token == true) - token + prima e seconda parte del codice di attivazione (passphrase). <br>
+          La funzione prende in input i dati relativi al cittadino che richiede l'identificazione (tra i quali dati anagrafici, domicilio, documento di riconoscimento) e una stringa che corrisponde all'HMAC dei dati di cui sopra più il PIN dell'operatore. <br> 
+          Output CASO OK - PDF contenente la prima parte del codice di attivazione (passphrase). <br>
           Output CASO KO - messaggio relativo all'errore riscontrato.
         content:
           multipart/form-data:
@@ -150,7 +149,6 @@ components:
       - municipality
       - county
       - nation
-      - get_token
       type: object
       properties:
         name:
@@ -233,12 +231,11 @@ components:
           example: Z000
         hmac_parameters:
           type: string
-        get_token:
-          type: boolean
         
     ApiAuthResponse200:
       required:
       - statusCode
+      - message
       type: object
       properties:
         statusCode:
@@ -250,6 +247,7 @@ components:
     ApiTokenResponse200:
       required:
       - statusCode
+      - message
       type: object
       properties:
         statusCode:
@@ -257,10 +255,18 @@ components:
           example: 200
         message:
           type: string
-          example: e!WE4q
+          example: "xref 
+                    5 6
+                    0000000618 00000 n
+                    0000000658 00000 n
+                    0000000701 00000 n
+                    0000000798 00000 n
+                    0000045112 00000 n
+                    0000045219 00000 n..."
     ApiAuthResponse405:
       required:
       - statusCode
+      - message
       type: object
       properties:
         statusCode:
@@ -272,6 +278,7 @@ components:
     ApiTokenResponse405:
       required:
       - statusCode
+      - message
       type: object
       properties:
         statusCode:
@@ -283,6 +290,7 @@ components:
     ApiAuthResponse403:
       required:
       - statusCode
+      - message
       type: object
       properties:
         statusCode:
@@ -294,6 +302,7 @@ components:
     ApiAuthResponse404:
       required:
       - statusCode
+      - message
       type: object
       properties:
         statusCode:
