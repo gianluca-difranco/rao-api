@@ -87,7 +87,7 @@ paths:
         200:
           description: Operazione eseguita con successo
           content:
-            application/json:
+            application/pdf:
               schema:
                 $ref: '#/components/schemas/ApiTokenResponse200'
         403:
