@@ -76,7 +76,7 @@ paths:
       requestBody:
         description: 
           La funzione prende in input i dati relativi al cittadino che richiede l'identificazione (tra i quali dati anagrafici, domicilio, documento di riconoscimento) e una stringa che corrisponde all'HMAC dei dati di cui sopra più il PIN dell'operatore. <br> 
-          Output CASO OK - PDF contenente la prima parte del codice di attivazione (passphrase). <br>
+          Output CASO OK - PDF stream contenente la prima parte del codice di attivazione (passphrase). <br>
           Output CASO KO - messaggio relativo all'errore riscontrato.
         content:
           multipart/form-data:
