@@ -75,8 +75,9 @@ paths:
           example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
       requestBody:
         description: 
-          La funzione prende in input i dati relativi al cittadino che richiede l'identificazione (tra i quali dati anagrafici, domicilio, documento di riconoscimento)  ed il pin dell'operatore che sta effettuando la richiesta. <br> 
-          Output CASO OK - primi 6 caratteri del codice di attivazione (passphrase). <br>
+          La funzione prende in input i dati relativi al cittadino che richiede l'identificazione (tra i quali dati anagrafici, domicilio, documento di riconoscimento), una variabile boleana get_token e una stringa che corrisponde all'HMAC dei dati di cui sopra più il PIN dell'operatore. <br> 
+          Output CASO OK (con get_token == false) - prima parte del codice di attivazione (passphrase). <br>
+          Output CASO OK (con get_token == true) - token + prima e seconda parte del codice di attivazione (passphrase). <br>
           Output CASO KO - messaggio relativo all'errore riscontrato.
         content:
           multipart/form-data:
@@ -123,7 +124,7 @@ components:
           example: LaMiaPass123!
     UserDetail:
       required:
-      - operator_pin
+      - hmac_parameters
       - fiscalNumber
       - name
       - familyName
@@ -149,11 +150,9 @@ components:
       - municipality
       - county
       - nation
+      - get_token
       type: object
       properties:
-        operator_pin:
-          type: integer
-          example: 142536
         name:
           type: string
           example: Giovanni Mario
@@ -232,6 +231,10 @@ components:
         nation:
           type: string
           example: Z000
+        hmac_parameters:
+          type: string
+        get_token:
+          type: boolean
         
     ApiAuthResponse200:
       required:
