@@ -89,8 +89,6 @@ paths:
         405:
           description: Codice OTP errato
   
-        
-          
   /revokeUser:
     post:
       tags:
@@ -119,7 +117,6 @@ paths:
           description: Non autorizzato
         404:
           description: Utente non trovato
-          
   
   /revokeIdentity:
     post:
@@ -171,7 +168,11 @@ paths:
       responses:
         200:
           description: Operazione eseguita con successo
-          
+        400:
+          description: Formato richiesta errato
+        401:
+          description: Non autorizzato
+ 
   /initAgency:
     post:
       tags:
@@ -190,8 +191,6 @@ paths:
           description: Operazione eseguita con successo
         400:
           description: Formato richiesta errato
-        405:
-          description: Formato dei parametri non corretto
   /uploadUser:
     post:
       tags:
@@ -210,8 +209,6 @@ paths:
           description: Operazione eseguita con successo
         400:
           description: Formato richiesta errato
-        405:
-          description: Formato dei parametri non corretto
   /uploadIdentity:
     post:
       tags:
@@ -232,6 +229,7 @@ paths:
           description: Formato richiesta errato
         405:
           description: Formato dei parametri non corretto
+
 components:
   schemas:
     Auth:
@@ -274,4 +272,3 @@ components:
         identity:
           type: string
           example: {'name':Andrea, 'surname':Bianchi, 'role': management, "..": ".."}
-    
