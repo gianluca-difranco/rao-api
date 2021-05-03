@@ -89,33 +89,6 @@ paths:
         405:
           description: Codice OTP errato
   
-  /userList/{agencyId}:
-    get:
-      tags:
-        - UserManagement
-      summary: inserimento OTP per verifica
-      description:
-          Dato in input l'id dell'agenzia, l'API restituisce l'elenco delle utenze di gestione.
-      parameters:
-      - name: agencyId
-        in: path
-        description: id dell'agenzia
-        required: true
-        schema:
-          type: integer
-      responses:
-        200:
-          description: Operazione eseguita con successo
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/userList'
-        400:
-          description: Formato richiesta errato
-        401:
-          description: Non autorizzato
-        404:
-          description: Azienda non trovata
         
           
   /revokeUser:
@@ -148,33 +121,6 @@ paths:
           description: Utente non trovato
           
   
-  /identityList/{agencyId}:
-    get:
-      tags:
-        - IdentityManagement
-      summary: inserimento OTP per verifica
-      description:
-          Dato in input l'id dell'agenzia, l'API restituisce l'elenco delle identità.
-      parameters:
-      - name: agencyId
-        in: path
-        description: id dell'agenzia
-        required: true
-        schema:
-          type: integer
-      responses:
-        200:
-          description: Operazione eseguita con successo
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/identityList' 
-        400:
-          description: Formato richiesta errato
-        401:
-          description: Non autorizzato
-        404:
-          description: Azienda non trovata
   /revokeIdentity:
     post:
       tags:
