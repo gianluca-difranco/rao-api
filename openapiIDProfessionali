@@ -10,6 +10,8 @@ tags:
   description: API per la gestione delle utenze
 - name: IdentityManagement
   description: API per la gestione delle identità
+- name: From IdP to Software
+  description: API richiamate dall'IdP per aggiornare lo stato del software 
 paths:
   /login:
     post:
@@ -223,6 +225,67 @@ paths:
       responses:
         200:
           description: Operazione eseguita con successo
+          
+  /initAgency:
+    post:
+      tags:
+      - From IdP to Software
+      summary: inizializzazione azienda sul software
+      requestBody:
+        description:
+          La funzione prende in input un JSON con i dati dell'azienda e un array di JSON con i dati dei relativi utenti.
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/initAgency'
+        required: true
+      responses:
+        200:
+          description: Operazione eseguita con successo
+        400:
+          description: Formato richiesta errato
+        405:
+          description: Formato dei parametri non corretto
+  /uploadUser:
+    post:
+      tags:
+      - From IdP to Software
+      summary: Upload sul software di un nuovo utente di gestione relativo ad un'azienda
+      requestBody:
+        description:
+          La funzione prende in input la partita iva dell'azienda e un JSON con i dati relativi all'identità rilasciata.
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/uploadUser'
+        required: true
+      responses:
+        200:
+          description: Operazione eseguita con successo
+        400:
+          description: Formato richiesta errato
+        405:
+          description: Formato dei parametri non corretto
+  /uploadIdentity:
+    post:
+      tags:
+      - From IdP to Software
+      summary: Upload sul software di un'identità relativa ad un'azienda
+      requestBody:
+        description:
+          La funzione prende in input la partita iva dell'azienda e un JSON con i dati relativi all'identità rilasciata.
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/uploadIdentity'
+        required: true
+      responses:
+        200:
+          description: Operazione eseguita con successo
+        400:
+          description: Formato richiesta errato
+        405:
+          description: Formato dei parametri non corretto
 components:
   schemas:
     Auth:
@@ -240,15 +303,6 @@ components:
     ApiAuthResponse200:
       type: string
       example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
-    ApiAuthResponse405:
-      type: string
-      example: Il formato del campo username non è corretto
-    ApiAuthResponse403:
-      type: string
-      example: Credenziali bloccate.
-    ApiAuthResponse404:
-      type: string
-      example: Non trovato
     userList:
       properties:
         users:
@@ -261,4 +315,29 @@ components:
           type: array
           example: [{'name':Mario, 'surname':Rossi, 'fiscalNumber': RSSFLV95C12H118C, "..": ".."},
                     {'name':Andrea, 'surname':Bianchi, 'fiscalNumber': RSSFLV95C12H11UZ, "..": ".."}]
+    initAgency:
+      properties:
+        agency:
+          type: string
+          example: {'id':1, 'name':'Nuova Azienda', 'vat':'999999999', 'domain':'nuovaazienda.com'}
+        users:
+          type: array
+          example: [{'name':Mario, 'surname':Rossi, 'role': management, "..": ".."},
+                    {'name':Andrea, 'surname':Bianchi, 'role': management, "..": ".."}]
+    uploadIdentity:
+      properties:
+        agencyVat:
+          type: string
+          example: 999999999
+        identity:
+          type: string
+          example: {'name':Andrea, 'surname':Bianchi, 'fiscalNumber': RSSFLV95C12H118C, "..": ".."}
+    uploadUser:
+      properties:
+        agencyVat:
+          type: string
+          example: 999999999
+        identity:
+          type: string
+          example: {'name':Andrea, 'surname':Bianchi, 'role': management, "..": ".."}
     
