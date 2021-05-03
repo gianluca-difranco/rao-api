@@ -249,18 +249,6 @@ components:
     ApiAuthResponse200:
       type: string
       example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
-    userList:
-      properties:
-        users:
-          type: array
-          example: [{'name':Mario, 'surname':Rossi, 'role': management, "..": ".."},
-                    {'name':Andrea, 'surname':Bianchi, 'role': management, "..": ".."}]
-    identityList:
-      properties:
-        users:
-          type: array
-          example: [{'name':Mario, 'surname':Rossi, 'fiscalNumber': RSSFLV95C12H118C, "..": ".."},
-                    {'name':Andrea, 'surname':Bianchi, 'fiscalNumber': RSSFLV95C12H11UZ, "..": ".."}]
     initAgency:
       properties:
         agency:
