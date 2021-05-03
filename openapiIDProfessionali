@@ -209,18 +209,18 @@ paths:
           description: Operazione eseguita con successo
         400:
           description: Formato richiesta errato
-  /uploadIdentity:
+  /updateIdentity:
     post:
       tags:
       - From IdP to Software
-      summary: Upload sul software di un'identità relativa ad un'azienda
+      summary: Aggiornamento dello stato di un'identità relativa ad un'azienda
       requestBody:
         description:
           La funzione prende in input la partita iva dell'azienda e un JSON con i dati relativi all'identità rilasciata.
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/uploadIdentity'
+              $ref: '#/components/schemas/updateIdentity'
         required: true
       responses:
         200:
@@ -256,14 +256,14 @@ components:
           type: array
           example: [{'name':Mario, 'surname':Rossi, 'role': management, "..": ".."},
                     {'name':Andrea, 'surname':Bianchi, 'role': management, "..": ".."}]
-    uploadIdentity:
+    updateIdentity:
       properties:
         agencyVat:
           type: string
           example: 999999999
         identity:
           type: string
-          example: {'name':Andrea, 'surname':Bianchi, 'fiscalNumber': RSSFLV95C12H118C, "..": ".."}
+          example: {'status':'released','name':Andrea, 'surname':Bianchi, 'fiscalNumber': RSSFLV95C12H118C, "..": ".."}
     uploadUser:
       properties:
         agencyVat:
