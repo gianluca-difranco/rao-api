@@ -4,119 +4,11 @@ info:
   description: Chiamate API per l'interazione tra portale e Sielte.
   version: 1.0.0
 tags:
-- name: Authentication
-  description: Api relative all'accesso di un'utenza
-- name: UserManagement
-  description: API per la gestione delle utenze
 - name: IdentityManagement
   description: API per la gestione delle identità
 - name: From IdP to Software
   description: API richiamate dall'IdP per aggiornare lo stato del software 
 paths:
-  /login:
-    post:
-      tags:
-      - Authentication
-      summary: Login tramite SielteID
-      operationId: auth
-      requestBody:
-        description:
-          La funzione prende in input il codice fiscale e la password dell'operatore che sta effettuando l'accesso. <br>
-          Output CASO OK - Token di sessione. <br>
-          Output CASO KO - messaggio relativo all'errore riscontrato.
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Auth'
-        required: true
-      responses:
-        200:
-          description: Operazione eseguita con successo
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiAuthResponse200'
-        400:
-          description: Formato richiesta errato
-        403:
-          description: l'utente è disabilitato. Non può accedere
-          
-        404:
-          description: Username o Password errati
-        405:
-          description: Formato dei parametri non corretto
-      x-codegen-request-body-name: payload
-  /otp:
-    post:
-      tags:
-      - Authentication
-      summary: inserimento OTP per verifica
-      requestBody:
-        description:
-          La funzione prende in input il Token di sessione e l'OTP.
-        content:
-          multipart/form-data:
-            schema:
-              required:
-              - sessionToken
-              - otp
-              type: object
-              properties:
-                sessionToken:
-                  type: string
-                  example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
-                otp:
-                  type: integer
-                  example: 345612
-        required: true
-      responses:
-        200:
-          description: Operazione eseguita con successo
-          content:
-            application/json:
-              schema:
-                properties:
-                  role:
-                    type: string
-                    example: management
-                  validatedSessionToken:
-                    type: string
-                    example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
-        400:
-          description: Formato richiesta errato
-        440:
-          description: Sessione scaduta. Richiedi un nuovo codice OTP.
-        405:
-          description: Codice OTP errato
-  
-  /revokeUser:
-    post:
-      tags:
-        - UserManagement
-      summary: revoca utenza di gestione
-      requestBody:
-        description:
-          La funzione prende in input il CF dell'operatore e l'azienda, restituendo uno status code.
-        content:
-          multipart/form-data:
-            schema:
-              properties:
-                agencyId:
-                  type: integer
-                  example: 2
-                userFiscalCode:
-                  type: string
-                  example: DFRGLC93E07C350A
-        required: true
-      responses:
-        200:
-          description: Operazione eseguita con successo
-        400:
-          description: Formato richiesta errato
-        401:
-          description: Non autorizzato
-        404:
-          description: Utente non trovato
   
   /revokeIdentity:
     post:
@@ -252,10 +144,6 @@ components:
         agency:
           type: string
           example: {'id':1, 'name':'Nuova Azienda', 'vat':'999999999', 'domain':'nuovaazienda.com'}
-        users:
-          type: array
-          example: [{'name':Mario, 'surname':Rossi, 'role': management, "..": ".."},
-                    {'name':Andrea, 'surname':Bianchi, 'role': management, "..": ".."}]
     updateIdentity:
       properties:
         agencyVat:
