@@ -15,16 +15,24 @@ paths:
       tags:
         - IdentityManagement
       summary: revoca identità
+      parameters:
+      - name: Authentication
+        in: header
+        description: Token di autenticazione di secondo livello relativo ad un utente di Governo. 
+        required: true
+        schema:
+          type: string
+          example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
       requestBody:
         description:
-          La funzione prende in input il CF relativa all'identità e l'azienda, restituendo uno status code.
+          La funzione prende in input la partita iva dell'azienda e il CF relativo all\'identità, restituendo uno status code.
         content:
           multipart/form-data:
             schema:
               properties:
-                agencyId:
-                  type: integer
-                  example: 2
+                companyVat: 
+                  type: string
+                  example: "999999999"
                 userFiscalCode:
                   type: string
                   example: DFRGLC93E07C350A
@@ -43,16 +51,24 @@ paths:
       tags:
         - IdentityManagement
       summary: Invia il token di autorizzazione per la creazione dell'identità.
+      parameters:
+      - name: Authentication
+        in: header
+        description: Token di autenticazione di secondo livello relativo ad un utente di Gestione. 
+        required: true
+        schema:
+          type: string
+          example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
       requestBody:
         description:
-          La funzione prende in input il token di autorizzazione relativo all'identità e l'azienda, restituendo uno status code.
+          La funzione prende in input il token di autorizzazione relativo all'identità e la partita iva dell\'azienda, restituendo uno status code.
         content:
           multipart/form-data:
             schema:
               properties:
-                agencyId:
-                  type: integer
-                  example: 2
+                companyVat: 
+                  type: string
+                  example: "999999999"
                 authToken:
                   type: string
                   example: 829cc13fc8e7ca9ab10e3206e56c9cb4fca993c0df73ae18214fe886ba0944b5
@@ -65,7 +81,7 @@ paths:
         401:
           description: Non autorizzato
  
-  /initAgency:
+  /initCompany:
     post:
       tags:
       - From IdP to Software
@@ -76,7 +92,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/initAgency'
+              $ref: '#/components/schemas/initCompany'
         required: true
       responses:
         200:
@@ -124,29 +140,14 @@ paths:
 
 components:
   schemas:
-    Auth:
-      required:
-      - password
-      - username
-      type: object
+    initCompany:
       properties:
-        username:
-          type: string
-          example: RSSMRA80A01C351O
-        password:
-          type: string
-          example: LaMiaPass123!
-    ApiAuthResponse200:
-      type: string
-      example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
-    initAgency:
-      properties:
-        agency:
+        company:
           type: string
           example: {'id':1, 'name':'Nuova Azienda', 'vat':'999999999', 'domain':'nuovaazienda.com'}
     updateIdentity:
       properties:
-        agencyVat:
+        companyVat:
           type: string
           example: 999999999
         identity:
@@ -154,7 +155,7 @@ components:
           example: {'status':'released','name':Andrea, 'surname':Bianchi, 'fiscalNumber': RSSFLV95C12H118C, "..": ".."}
     uploadUser:
       properties:
-        agencyVat:
+        companyVat:
           type: string
           example: 999999999
         identity:
