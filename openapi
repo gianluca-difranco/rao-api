@@ -103,6 +103,43 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiTokenResponse405'
       x-codegen-request-body-name: payload
+  /log/{date}:
+    get:
+      tags:
+      - LOG
+      summary: Download dei log giornalieri
+      operationId: date
+      parameters:
+      - name: Authentication
+        in: header
+        description: Token di autenticazione - token da inserire nell'header per autenticare la richiesta. 
+        required: true
+        schema:
+          type: string
+          example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
+      - name: date
+        in: "path"
+        description: "data da scegliere"
+        required: true
+        schema:
+          type: string
+          example: "2021-06-07"
+      responses:
+        200:
+          description: operazione riuscita
+          content:
+              text/html:
+                schema:
+                  type: string
+                  example: "TokenID:d82baebead144d99bd2b2752343c1ae4, Operator: Mario Rossi, CFidentificated:BNCNDR69S15A001C, CreationDate:2021-06-07 10:24 \nTokenID:21954de9a5d34580bfe23c39cb86f5aa, Operator: Federico Verdi, CFidentificated:BGLLDA69S15A001B, CreationDate:2021-06-07 11:03"
+        405:
+          description: Formato non corretto
+          content:
+            text/html:
+              schema:
+                type: string
+                example: "Il formato del campo data corretto"
+      
 components:
   schemas:
     Auth:
@@ -231,7 +268,7 @@ components:
           example: Z000
         hmac_parameters:
           type: string
-        
+    
     ApiAuthResponse200:
       type: string
       example: eyJ1c2VybmFtZSI6IkNpYW8ifQ:1lWcPE:a-vukHyF6j_sAxiHWSJ78wjeEqw
