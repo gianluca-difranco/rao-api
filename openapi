@@ -4,18 +4,12 @@ info:
   description: Chiamate API relative all'accesso e alla creazione del token.
   version: 1.0.0
 servers:
-- url: https://milano.rao.spid.app/
+- url: endpoint
 tags:
 - name: Authentication
   description: Api relative all'accesso di un operatore
-  externalDocs:
-    description: git R.A.O. pubblico
-    url: https://github.com/Sielte/rao-pubblico
 - name: Sigillo
   description: Generazione di una richiesta di identificazione
-  externalDocs:
-    description: git R.A.O. pubblico
-    url: https://github.com/Sielte/rao-pubblico
 paths:
   /auth:
     post:
