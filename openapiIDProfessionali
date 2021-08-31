@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: ID Professionali
-  description: Chiamate API per l'interazione tra Sistema di Gestione Identità e Sielte.
+  description: Chiamate API per l'interazione tra Sistema di Gestione Identità e IdP.
   version: 1.0.0
 tags:
 - name: IdentityManagement
